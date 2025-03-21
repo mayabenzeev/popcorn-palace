@@ -1,33 +1,27 @@
 package com.att.tdp.popcorn_palace.entity;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.*;
+import lombok.*;
 
-import java.util.UUID;
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "bookings",
+        uniqueConstraints = {@UniqueConstraint(
+                columnNames = {"title", "genre", "duration", "releaseYear"})}) //to prevent inserting two movies with the same values
 
-/**
- * The type Movie.
- */
 public class Movie {
-    Long id; //JPA auto generated - leave it null
-    String title;
-    String genre;
-    Integer duration;
-    Float rating;
-    Integer releaseYear;
-
-
-    /**
-     * Instantiates a new Movie.
-     */
-    public Movie(){}
-
-    public Movie(String title, String genre, int duration, float rating, int releaseYear) {
-        this.title = title;
-        this.genre = genre;
-        this.duration = duration;
-        this.rating = rating;
-        this.releaseYear = releaseYear;
-    }
-
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id; //JPA auto generated - leave it null
+    @Column(nullable = false) // title cannot be null
+    private String title;
+    @Column(nullable = false)
+    private String genre;
+    @Column(nullable = false)
+    private Integer duration;
+    @Column(nullable = false)
+    private Float rating;
+    @Column(name = "release_year", nullable = false)
+    private Integer releaseYear;
 }

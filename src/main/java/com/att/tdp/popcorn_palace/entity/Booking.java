@@ -1,19 +1,25 @@
 package com.att.tdp.popcorn_palace.entity;
 
 import java.util.UUID;
+import jakarta.persistence.*;
+import lombok.*;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "bookings",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"showTime", "seatNumber"})}) // to prevent a seat from being booked twice for the same showtime
 public class Booking {
-    Long id;
-    UUID userId;
-    ShowTime showTime;
-    Integer seatNumber;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id; //JPA auto generated - leave it null
+    @Column(name = "user_id", nullable = false) // user id cannot be null
+    private UUID userId;
+    //TODO: change to String (?)
 
-    public Booking() {
-    }
-
-    public Booking(UUID userId, ShowTime showtimeId, Integer seatNumber) {
-        this.userId = userId;
-        this.showTime = showtimeId;
-        this.seatNumber = seatNumber;
-    }
+    // foreign key
+    @Column(name = "showtime_id", nullable = false) // showtime id cannot be null
+    private Long showTimeId;
+    @Column(name = "seat_number", nullable = false) // seat number cannot be null
+    private Integer seatNumber;
 }
