@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "bookings",
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"showTime", "seatNumber"})}) // to prevent a seat from being booked twice for the same showtime
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"showtime_id", "seat_number"})}) // to prevent a seat from being booked twice for the same showtime
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
