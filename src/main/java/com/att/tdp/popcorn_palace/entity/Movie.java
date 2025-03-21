@@ -2,7 +2,6 @@ package com.att.tdp.popcorn_palace.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity

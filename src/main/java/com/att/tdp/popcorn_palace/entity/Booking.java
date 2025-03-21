@@ -22,4 +22,12 @@ public class Booking {
     private Long showTimeId;
     @Column(name = "seat_number", nullable = false) // seat number cannot be null
     private Integer seatNumber;
+
+    public Long getShowTimeId() {
+        return this.showTimeId;
+    }
+
+    public Integer getSeatNumber() {
+        return this.seatNumber;
+    }
 }

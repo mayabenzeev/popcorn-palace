@@ -24,4 +24,19 @@ public class ShowTime {
     @Column(name = "end_time", nullable = false, columnDefinition = "TIMESTAMP WITH TIME ZONE")
     private OffsetDateTime endTime;
 
+    public Long getId() {
+        return this.id;
+    }
+
+    public String getTheater() {
+        return this.theater;
+    }
+
+    public OffsetDateTime getStartTime() {
+        return this.startTime;
+    }
+
+    public OffsetDateTime getEndTime() {
+        return this.endTime;
+    }
 }
