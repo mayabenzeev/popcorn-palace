@@ -1,30 +1,25 @@
 package com.att.tdp.popcorn_palace.service;
 
 import com.att.tdp.popcorn_palace.entity.Booking;
+import com.att.tdp.popcorn_palace.entity.ShowTime;
 import com.att.tdp.popcorn_palace.repository.BookingRepository;
 import com.att.tdp.popcorn_palace.repository.ShowTimeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Book;
-
 @Service
-public class BookingService {
+public class ShowTimeService {
 
-    @Autowired
-    private BookingRepository bookingRepository;
     @Autowired
     private ShowTimeRepository showTimeRepository;
 
-    public void bookTicket(Booking booking) {
-        // check if show time exists
-        if (!showTimeRepository.findById(booking.getShowTimeId()).isPresent()) {
-            throw new IllegalArgumentException("Show time does not exist");
+    public ShowTime addShowTime(ShowTime showTime) {
+        // check if there is no intersected time intervals in the same theater
+        if(showTimeRepository.findOverlappingShowTimes(showTime.getTheater(), showTime.getStartTime(), showTime.getEndTime()).isPresent()){
+            throw new IllegalArgumentException(String.format(
+                    "ShowTime %d in theater %s overlaps with another show time", showTime.getId(), showTime.getTheater()));
         }
-        // check if this is not a duplicate booking
-        if (bookingRepository.findByShowTimeIdAndSeatNumber(booking.getShowTimeId(), booking.getSeatNumber()).isPresent()) {
-            throw new IllegalArgumentException("Seat is already booked");
-        }
-        bookingRepository.save(booking); // save booking to db
+
+        return showTimeRepository.save(showTime); // save show time to db
     }
 }
