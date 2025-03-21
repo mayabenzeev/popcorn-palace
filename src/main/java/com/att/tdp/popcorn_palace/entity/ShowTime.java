@@ -11,17 +11,17 @@ import lombok.*;;
 public class ShowTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
     @Column(nullable = false)
-    Float price;
+    private Float price;
     // foreign key
     @Column(name = "movie_id", nullable = false)
-    Long movieId;
+    private Long movieId;
     @Column(nullable = false)
-    String theater;
+    private String theater;
     @Column(name = "start_time", nullable = false, columnDefinition = "TIMESTAMP WITH TIME ZONE")
-    OffsetDateTime startTime;
+    private OffsetDateTime startTime;
     @Column(name = "end_time", nullable = false, columnDefinition = "TIMESTAMP WITH TIME ZONE")
-    OffsetDateTime endTime;
+    private OffsetDateTime endTime;
 
 }
