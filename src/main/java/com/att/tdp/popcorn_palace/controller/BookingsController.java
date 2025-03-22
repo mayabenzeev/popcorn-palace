@@ -1,9 +1,11 @@
 package com.att.tdp.popcorn_palace.controller;
 
+import com.att.tdp.popcorn_palace.dto.BookingRequestDTO;
 import com.att.tdp.popcorn_palace.entity.Booking;
 import com.att.tdp.popcorn_palace.service.BookingService;
-import lombok.AllArgsConstructor;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +23,8 @@ public class BookingsController {
     }
 
     @PostMapping
-    public void bookTicket(@RequestBody Booking booking) {
-        bookingService.bookTicket(booking);
+    public ResponseEntity<Void> bookTicket(@RequestBody @Valid BookingRequestDTO bookingDTO) {
+        bookingService.bookTicket(bookingDTO);
+        return ResponseEntity.ok().build();
     }
 }

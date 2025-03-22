@@ -1,5 +1,6 @@
 package com.att.tdp.popcorn_palace.service;
 
+import com.att.tdp.popcorn_palace.dto.ShowtimeRequestDTO;
 import com.att.tdp.popcorn_palace.entity.Movie;
 import com.att.tdp.popcorn_palace.entity.Showtime;
 import com.att.tdp.popcorn_palace.exception.AlreadyExistException;
@@ -13,9 +14,6 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.util.Optional;
 
-/**
- * The type Showtime service.
- */
 @Service
 public class ShowtimeService {
 
@@ -25,6 +23,12 @@ public class ShowtimeService {
     @Autowired
     private MovieRepository movieRepository;
 
+    /**
+     * Get a showtime by its id
+     * @param id - the showtime id
+     * @return Showtime object
+     * @throws NotFoundException if the showtime does not exist in the database
+     */
     public Showtime getShowtimeById(Long id) {
         // check if showtime exists
         Optional<Showtime> dbShowtime = showtimeRepository.findById(id);
@@ -35,33 +39,50 @@ public class ShowtimeService {
 
         return dbShowtime.get();
     }
-    public Showtime addShowtime(Showtime showtime) {
-        validateShowtime(showtime, null); // validate the new showtime
 
-        return showtimeRepository.save(showtime); // save show time to db
+    /**
+     * Add a new showtime to the database
+     * @param showtimeDTO - the new showtime to add
+     * @return Showtime saved entity
+     * @throws NotFoundException,BadRequestException,AlreadyExistException
+     */
+    public Showtime addShowtime(ShowtimeRequestDTO showtimeDTO) {
+        validateShowtime(showtimeDTO, null); // validate the new showtime
+
+        return showtimeRepository.save(fromDtoToShowtime(showtimeDTO)); // save show time to db
     }
 
-    public void updateShowtime(Long showtimeId, Showtime updatedShowtime) {
+    /**
+     * Update an existing showtime in the database
+     * @param showtimeId - the id of the showtime to update
+     * @param updatedShowtimeDTO - the new showtime values
+     * @throws NotFoundException,BadRequestException,AlreadyExistException
+     */
+    public void updateShowtime(Long showtimeId, ShowtimeRequestDTO updatedShowtimeDTO) {
         // check if show time exists
         Optional<Showtime> dbShowtime = showtimeRepository.findById(showtimeId);
         if (!dbShowtime.isPresent()) {
             throw new NotFoundException(String.format("Showtime with id %d does not exist", showtimeId));
         }
 
-        validateShowtime(updatedShowtime, showtimeId); // validate the updates
+        validateShowtime(updatedShowtimeDTO, showtimeId); // validate the updates
 
         // Update show time to the new values
         Showtime existingShowtime = dbShowtime.get(); // get existing show time from the optional object
-        existingShowtime.setMovieId(updatedShowtime.getMovieId());
-        existingShowtime.setPrice(updatedShowtime.getPrice());
-        existingShowtime.setTheater(updatedShowtime.getTheater());
-        existingShowtime.setStartTime(updatedShowtime.getStartTime());
-        existingShowtime.setEndTime(updatedShowtime.getEndTime());
+        existingShowtime.setMovieId(updatedShowtimeDTO.getMovieId());
+        existingShowtime.setPrice(updatedShowtimeDTO.getPrice());
+        existingShowtime.setTheater(updatedShowtimeDTO.getTheater());
+        existingShowtime.setStartTime(updatedShowtimeDTO.getStartTime());
+        existingShowtime.setEndTime(updatedShowtimeDTO.getEndTime());
 
         showtimeRepository.save(existingShowtime); // save updated show time to db
     }
 
-
+    /**
+     * Delete a showtime from the database
+     * @param id - the id of the showtime to delete
+     * @throws NotFoundException if the showtime does not exist in the database
+     */
     public void deleteShowtime(Long id) {
         // check if show time exists
         Optional<Showtime> dbShowtime = showtimeRepository.findById(id);
@@ -78,14 +99,14 @@ public class ShowtimeService {
      * 1. Movie exists
      * 2. The new showtime times are valid
      * 3. The new showtime does not overlap with another show time in the same theater
-     * @param showtime - the showtime to validate
+     * @param showtimeDTO - the showtime to validate
      * @param excludeId - the id of the showtime to exclude from the overlap check (null if not updating)
      * @throws NotFoundException,BadRequestException,AlreadyExistException
      */
-    private void validateShowtime(Showtime showtime, Long excludeId) {
-        Movie dbMovie = returnMovieIfExist(showtime.getMovieId());
-        validateTimeInterval(showtime, dbMovie.getDuration());
-        checkNoOverlaps(showtime, excludeId);
+    private void validateShowtime(ShowtimeRequestDTO showtimeDTO, Long excludeId) {
+        Movie dbMovie = returnMovieIfExist(showtimeDTO.getMovieId());
+        validateTimeInterval(showtimeDTO, dbMovie.getDuration());
+        checkNoOverlaps(showtimeDTO, excludeId);
     }
 
     /**
@@ -105,18 +126,18 @@ public class ShowtimeService {
     /**
      * Validate the correction of the showtime time interval
      * (startTime before endTime, at least the movie duration)
-     * @param showtime - the showtime to validate
+     * @param showtimeDTO - the showtime to validate
      * @param expectedDuration - the expected duration of the movie
      * @throws BadRequestException
      */
-    private void validateTimeInterval (Showtime showtime, int expectedDuration) {
+    private void validateTimeInterval (ShowtimeRequestDTO showtimeDTO, int expectedDuration) {
         // start time is before the end time
-        if (!showtime.getStartTime().isBefore(showtime.getEndTime())) {
+        if (!showtimeDTO.getStartTime().isBefore(showtimeDTO.getEndTime())) {
             throw new BadRequestException("Start time must be before end time");
         }
 
         // showtime duration is at least the movie duration
-        Duration showtimeDuration = Duration.between(showtime.getStartTime(), showtime.getEndTime());
+        Duration showtimeDuration = Duration.between(showtimeDTO.getStartTime(), showtimeDTO.getEndTime());
         if (showtimeDuration.toMinutes() < expectedDuration) {
             throw new BadRequestException(String.format("Showtime duration must be at least %d minutes", expectedDuration));
         }
@@ -124,17 +145,31 @@ public class ShowtimeService {
 
     /**
      * Check if the new showtime does not overlap with another show time in the same theater
-     * @param showtime - the showtime to validate
+     * @param showtimeDTO - the showtime to validate
      * @param currentId - the id of the showtime to exclude from the overlap check (null if not updating)
      * @throws AlreadyExistException
      */
-    private void checkNoOverlaps (Showtime showtime, Long currentId){
+    private void checkNoOverlaps (ShowtimeRequestDTO showtimeDTO, Long currentId){
         // check if the new showtime does not overlap with another *different* show time in the same theater
         if(showtimeRepository.findOverlappingShowtimes(
-                currentId, showtime.getTheater(), showtime.getStartTime(), showtime.getEndTime()).isPresent()){
+                currentId, showtimeDTO.getTheater(), showtimeDTO.getStartTime(), showtimeDTO.getEndTime()).isPresent()){
             throw new AlreadyExistException(String.format(
-                    "A showtime already exists in theater %s that overlaps this show time.", showtime.getTheater()));
+                    "A showtime already exists in theater %s that overlaps this show time.", showtimeDTO.getTheater()));
         }
+    }
 
+    /**
+     * Convert ShowtimeDTO to Showtime entity
+     * @param showtimeDTO
+     * @return Showtime object
+     */
+    private static Showtime fromDtoToShowtime(ShowtimeRequestDTO showtimeDTO) {
+        Showtime showtime = new Showtime();
+        showtime.setMovieId(showtimeDTO.getMovieId());
+        showtime.setPrice(showtimeDTO.getPrice());
+        showtime.setTheater(showtimeDTO.getTheater());
+        showtime.setStartTime(showtimeDTO.getStartTime());
+        showtime.setEndTime(showtimeDTO.getEndTime());
+        return showtime;
     }
 }

@@ -1,7 +1,11 @@
 package com.att.tdp.popcorn_palace.controller;
 
+import com.att.tdp.popcorn_palace.dto.ShowtimeRequestDTO;
 import com.att.tdp.popcorn_palace.entity.Showtime;
+import com.att.tdp.popcorn_palace.repository.ShowtimeRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.att.tdp.popcorn_palace.service.ShowtimeService;
 
@@ -16,23 +20,25 @@ public class ShowtimesController {
     }
 
     @GetMapping("/{id}")
-    public Showtime getShowtimeById(@PathVariable Long id) {
-        return showtimeService.getShowtimeById(id);
+    public ResponseEntity<Showtime> getShowtimeById(@PathVariable Long id) {
+        return ResponseEntity.ok(showtimeService.getShowtimeById(id));
     }
 
     @PostMapping
-    public Showtime addShowtime(@RequestBody Showtime showtime) {
-        return showtimeService.addShowtime(showtime);
+    public ResponseEntity<Showtime> addShowtime(@RequestBody @Valid ShowtimeRequestDTO showtimeDTO) {
+        return ResponseEntity.ok(showtimeService.addShowtime(showtimeDTO));
     }
 
     @PostMapping("/update/{id}")
-    public void updateShowtime(@PathVariable Long id, @RequestBody Showtime updatedShowtime) {
-        showtimeService.updateShowtime(id, updatedShowtime);
+    public ResponseEntity<Void> updateShowtime(
+            @PathVariable Long id, @RequestBody @Valid ShowtimeRequestDTO updatedShowtimeDTO){
+        showtimeService.updateShowtime(id, updatedShowtimeDTO);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
-    public void deleteShowtime(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteShowtime(@PathVariable Long id) {
         showtimeService.deleteShowtime(id);
-    }
+        return ResponseEntity.ok().build();    }
 
 }

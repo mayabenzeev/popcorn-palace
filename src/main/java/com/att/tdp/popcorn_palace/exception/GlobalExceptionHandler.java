@@ -2,42 +2,56 @@ package com.att.tdp.popcorn_palace.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.ZonedDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = NotFoundException.class)
     public ResponseEntity<?> handleNotFoundException(NotFoundException e) {
-        return createResponseBody(e, HttpStatus.NOT_FOUND);
+        return createResponseBody(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = AlreadyExistException.class)
     public ResponseEntity<?> handleAlreadyExistException(AlreadyExistException e) {
-        return createResponseBody(e, HttpStatus.CONFLICT);
+        return createResponseBody(e.getMessage(), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(value = BadRequestException.class)
     public ResponseEntity<?> handleBadRequestException(BadRequestException e) {
-        return createResponseBody(e, HttpStatus.BAD_REQUEST);
+        return createResponseBody(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    public ResponseEntity<?> handleValidationErrors(MethodArgumentNotValidException e) {
+        // beautify all validation errors
+        String errorMessage = e.getFieldErrors()
+                .stream()
+                .map(fieldError -> fieldError.getDefaultMessage())
+                .collect(Collectors.joining(", "));
+        return createResponseBody(errorMessage, HttpStatus.BAD_REQUEST);
+    }
+
+    //TODO: add global handler for other exceptions
 
     /**
      * Creates a unified response format for all exceptions
-     * @param e - exception
+     * @param errorMessage - string exception message
      * @param status - HTTP status
      * @return ResponseEntity
      */
-    private ResponseEntity<?> createResponseBody (Exception e, HttpStatus status) {
+    private ResponseEntity<?> createResponseBody (String errorMessage, HttpStatus status) {
         Map<String, Object> responseBody = new LinkedHashMap<>(); // to keep this order of fields in the response
         responseBody.put("timestamp", ZonedDateTime.now());
         responseBody.put("status", status.value());
-        responseBody.put("message", e.getMessage());
+        responseBody.put("message", errorMessage);
 
         return new ResponseEntity(responseBody, status);
     }

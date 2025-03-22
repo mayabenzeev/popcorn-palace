@@ -1,5 +1,6 @@
 package com.att.tdp.popcorn_palace.service;
 
+import com.att.tdp.popcorn_palace.dto.BookingRequestDTO;
 import com.att.tdp.popcorn_palace.entity.Booking;
 import com.att.tdp.popcorn_palace.exception.AlreadyExistException;
 import com.att.tdp.popcorn_palace.exception.NotFoundException;
@@ -16,16 +17,34 @@ public class BookingService {
     @Autowired
     private ShowtimeRepository showtimeRepository;
 
-    public Booking bookTicket(Booking booking) {
+    /**
+     * Creates a booking entity for a given showtime
+     * @param bookingDTO
+     * @return Booking saved entity
+     */
+    public Booking bookTicket(BookingRequestDTO bookingDTO) {
         // check if wanted showtime exists
-        if (!showtimeRepository.findById(booking.getShowtimeId()).isPresent()) {
-            throw new NotFoundException(String.format("Show time with id %d does not exist", booking.getShowtimeId()));
+        if (!showtimeRepository.findById(bookingDTO.getShowtimeId()).isPresent()) {
+            throw new NotFoundException(String.format("Show time with id %d does not exist", bookingDTO.getShowtimeId()));
         }
         // check if the wanted seat is not taken
-        if (bookingRepository.findByShowtimeIdAndSeatNumber(booking.getShowtimeId(), booking.getSeatNumber()).isPresent()) {
+        if (bookingRepository.findByShowtimeIdAndSeatNumber(bookingDTO.getShowtimeId(), bookingDTO.getSeatNumber()).isPresent()) {
             throw new AlreadyExistException(String.format("Seat number %d is already booked for showtime with id %d",
-                    booking.getSeatNumber(), booking.getShowtimeId()));
+                    bookingDTO.getSeatNumber(), bookingDTO.getShowtimeId()));
         }
-        return bookingRepository.save(booking); // save booking to db
+        return bookingRepository.save(fromDtoToBooking(bookingDTO)); // save booking to db
+    }
+
+    /**
+     * Convert BookingDTO to Booking entity
+     * @param bookingDTO
+     * @return Booking object
+     */
+    private static Booking fromDtoToBooking(BookingRequestDTO bookingDTO) {
+        Booking booking = new Booking();
+        booking.setUserId(bookingDTO.getUserId());
+        booking.setShowtimeId(bookingDTO.getShowtimeId());
+        booking.setSeatNumber(bookingDTO.getSeatNumber());
+        return booking;
     }
 }
