@@ -12,7 +12,7 @@ import lombok.*;
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; //JPA auto generated - leave it null
+    private UUID id; //JPA auto generated - leave it null
     @Column(name = "user_id", nullable = false) // user id cannot be null
     private UUID userId;
     //TODO: change to String (?)

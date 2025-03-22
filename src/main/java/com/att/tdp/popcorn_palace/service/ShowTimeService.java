@@ -23,7 +23,7 @@ public class ShowTimeService {
     @Autowired
     private MovieRepository movieRepository;
 
-    public ShowTime getShowTime(Long id) {
+    public ShowTime getShowTimeById(Long id) {
         // check if showtime exists
         Optional<ShowTime> dbShowTime = showTimeRepository.findById(id);
 
@@ -101,5 +101,6 @@ public class ShowTimeService {
             throw new AlreadyExistException(String.format(
                     "A showtime already exists in theater %s that overlaps this show time.", showTime.getTheater()));
         }
+
     }
 }
