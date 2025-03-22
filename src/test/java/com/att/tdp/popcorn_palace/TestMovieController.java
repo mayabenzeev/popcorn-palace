@@ -1,13 +1,22 @@
 package com.att.tdp.popcorn_palace;
 
-public class TestBookingController {
+public class TestMovieController {
     /**
-     * add booking success test
-     * add booking with a non uuid format user id test
-     * add booking with a showtime that does not exist test
-     * add booking with a showtime that has already started test
-     * add booking to a showtime with a taken seat test
-     * add booking with a too big seat number test
+     *     // add movie with null values test
+     *     // add movie with empty values test
+     *     // add movie with a massive duration time test
+     *     // add movie with a float duration time test
+     *     // add movie with invalid ratings values test
+     *     // add movie with future release date test
+     *     // add movie with unexpected json keys test
      *
+     * update movie with missing values test
+     * update movie with null values test
+     * update movie with empty values test
+     * update movie with invalid rating test
+     * update movie with no changes test
+     *
+     *
+     * delete movie database error test
      */
 }
