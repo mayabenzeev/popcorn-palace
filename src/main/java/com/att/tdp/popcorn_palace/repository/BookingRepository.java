@@ -7,6 +7,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface BookingRepository extends JpaRepository<Booking, UUID> {
-    Optional<Booking> findByShowTimeIdAndSeatNumber(Long showTimeId, Integer seatNumber);
+    Optional<Booking> findByShowtimeIdAndSeatNumber(Long showTimeId, Integer seatNumber);
 
 }

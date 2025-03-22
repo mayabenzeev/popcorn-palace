@@ -8,13 +8,17 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@AllArgsConstructor
 @RestController
 @RequestMapping("/movies") // base URL for all endpoints in movies controller
 public class MoviesController {
 
     // TODO: change to response entity upon exception handling
-    private MovieService movieService;
+    private final MovieService movieService;
+
+    @Autowired
+    public MoviesController(MovieService movieService) {
+        this.movieService = movieService;
+    }
 
     @GetMapping("/all")
     public List<Movie> getAllMovies() {
@@ -26,7 +30,7 @@ public class MoviesController {
         return movieService.addMovie(movie);
     }
 
-    @PutMapping("/update/{title}")
+    @PostMapping("/update/{title}")
     public void updateMovie(@PathVariable String title, @RequestBody Movie updatedMovie) {
         movieService.updateMovie(title, updatedMovie);
     }

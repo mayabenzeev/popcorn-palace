@@ -49,7 +49,7 @@ public class MovieService {
 
         // Update movie to the new values
         Movie existingMovie = dbMovie.get(); // get existing movie from the optional object
-        existingMovie.setTitle(updatedMovie.getGenre());
+        existingMovie.setTitle(updatedMovie.getTitle());
         existingMovie.setGenre(updatedMovie.getGenre());
         existingMovie.setDuration(updatedMovie.getDuration());
         existingMovie.setRating(updatedMovie.getRating());

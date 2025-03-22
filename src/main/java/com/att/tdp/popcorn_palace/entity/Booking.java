@@ -17,15 +17,18 @@ public class Booking {
 
     @Column(name = "user_id", nullable = false) // user id cannot be null
     private UUID userId;
-    //TODO: change to String (?)
 
     // foreign key
     @Column(name = "showtime_id", nullable = false) // showtime id cannot be null
-    private Long showTimeId;
+    private Long showtimeId;
     @Column(name = "seat_number", nullable = false) // seat number cannot be null
     private Integer seatNumber;
 
-    public Long getShowTimeId() { return this.showTimeId; }
+    public Long getShowtimeId() { return this.showtimeId; }
 
     public Integer getSeatNumber() { return this.seatNumber; }
+
+    public void setUserId(UUID userId) { this.userId = userId; }
+    public void setShowtimeId(Long showtimeId) { this.showtimeId = showtimeId; }
+    public void setSeatNumber(Integer seatNumber) { this.seatNumber = seatNumber; }
 }
