@@ -10,12 +10,14 @@ import java.util.Optional;
 
 public interface ShowTimeRepository extends JpaRepository<ShowTime, Long> {
 
-    // find overlapping show times in the same theater
+    // find overlapping show times in the same theater that are not the same show time
     @Query("""
             SELECT st FROM ShowTime st 
             WHERE s.theater = :theater
-            AND (s.startTime < :endTime AND s.endTime > :startTime)""")
-    Optional<ShowTime> findOverlappingShowTimes(@Param("theater") String theater,
+            AND (s.startTime < :endTime AND s.endTime > :startTime)
+            AND (s.id <> :currentId)""")
+    Optional<ShowTime> findOverlappingShowTimes(@Param("currentId") Long id,
+                                                @Param("theater") String theater,
                                                 @Param("startTime") OffsetDateTime startTime,
                                                 @Param("endTime")OffsetDateTime endTime);
 }
