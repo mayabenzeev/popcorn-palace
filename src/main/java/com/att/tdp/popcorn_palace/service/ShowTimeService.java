@@ -63,6 +63,7 @@ public class ShowTimeService {
         // Update show time to the new values
         ShowTime existingShowTime = dbShowTime.get(); // get existing show time from the optional object
         existingShowTime.setMovieId(updatedShowTime.getMovieId());
+        existingShowTime.setPrice(updatedShowTime.getPrice());
         existingShowTime.setTheater(updatedShowTime.getTheater());
         existingShowTime.setStartTime(updatedShowTime.getStartTime());
         existingShowTime.setEndTime(updatedShowTime.getEndTime());

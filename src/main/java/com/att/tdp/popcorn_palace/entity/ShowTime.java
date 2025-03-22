@@ -25,6 +25,7 @@ public class ShowTime {
     private OffsetDateTime endTime;
 
     public Long getId() { return this.id; }
+    public Float getPrice() { return this.price;}
     public Long getMovieId() { return this.movieId; }
     public String getTheater() {
         return this.theater;
@@ -36,8 +37,11 @@ public class ShowTime {
         return this.endTime;
     }
 
+    public void setPrice(Float price) { this.price = price; }
     public void setMovieId(Long movieId) { this.movieId = movieId; }
     public void setTheater(String theater) { this.theater = theater; }
     public void setStartTime(OffsetDateTime startTime) { this.startTime = startTime; }
     public void setEndTime(OffsetDateTime endTime) { this.endTime = endTime; }
+
+
 }
