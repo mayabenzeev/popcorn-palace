@@ -24,19 +24,20 @@ public class ShowTime {
     @Column(name = "end_time", nullable = false, columnDefinition = "TIMESTAMP WITH TIME ZONE")
     private OffsetDateTime endTime;
 
-    public Long getId() {
-        return this.id;
-    }
-
+    public Long getId() { return this.id; }
+    public Long getMovieId() { return this.movieId; }
     public String getTheater() {
         return this.theater;
     }
-
     public OffsetDateTime getStartTime() {
         return this.startTime;
     }
-
     public OffsetDateTime getEndTime() {
         return this.endTime;
     }
+
+    public void setMovieId(Long movieId) { this.movieId = movieId; }
+    public void setTheater(String theater) { this.theater = theater; }
+    public void setStartTime(OffsetDateTime startTime) { this.startTime = startTime; }
+    public void setEndTime(OffsetDateTime endTime) { this.endTime = endTime; }
 }
