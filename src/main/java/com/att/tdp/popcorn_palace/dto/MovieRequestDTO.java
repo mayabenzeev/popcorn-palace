@@ -1,8 +1,10 @@
 package com.att.tdp.popcorn_palace.dto;
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 
 import java.time.Year;
 
+@AllArgsConstructor
 public class MovieRequestDTO {
     @NotBlank(message = "Title is required")
     private String title;

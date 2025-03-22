@@ -96,7 +96,7 @@ public class MovieService {
      * @param movieDTO
      * @return Movie object
      */
-    private static Movie fromDtoToMovie(MovieRequestDTO movieDTO) {
+    public static Movie fromDtoToMovie(MovieRequestDTO movieDTO) {
         Movie movie = new Movie();
         movie.setTitle(movieDTO.getTitle());
         movie.setGenre(movieDTO.getGenre());

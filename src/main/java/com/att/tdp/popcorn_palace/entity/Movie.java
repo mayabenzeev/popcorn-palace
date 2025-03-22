@@ -31,18 +31,11 @@ public class Movie {
     public void setReleaseYear(Integer newReleaseYear) { this.releaseYear = newReleaseYear;}
 
     public Long getId() { return this.id;}
-    public String getTitle() {
-        return this.title;
-    }
-    public String getGenre() {
-        return this.genre;
-    }
+    public String getTitle() {return this.title;}
+    public String getGenre() {return this.genre;}
     public Integer getDuration() { return this.duration; }
     public Float getRating() { return this.rating; }
-    public Integer getReleaseYear() {
-        return this.releaseYear;
-    }
+    public Integer getReleaseYear() {return this.releaseYear;}
 
 
-    //TODO: implement equals / toString
 }

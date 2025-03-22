@@ -24,12 +24,12 @@ public class Booking {
     @Column(name = "seat_number", nullable = false) // seat number cannot be null
     private Integer seatNumber;
 
-    public UUID getUserId() { return this.userId; }
-    public Long getShowtimeId() { return this.showtimeId; }
-
-    public Integer getSeatNumber() { return this.seatNumber; }
-
     public void setUserId(UUID userId) { this.userId = userId; }
     public void setShowtimeId(Long showtimeId) { this.showtimeId = showtimeId; }
     public void setSeatNumber(Integer seatNumber) { this.seatNumber = seatNumber; }
+
+    public UUID getUserId() { return this.userId; }
+    public Long getShowtimeId() { return this.showtimeId; }
+    public Integer getSeatNumber() { return this.seatNumber; }
+
 }

@@ -163,7 +163,7 @@ public class ShowtimeService {
      * @param showtimeDTO
      * @return Showtime object
      */
-    private static Showtime fromDtoToShowtime(ShowtimeRequestDTO showtimeDTO) {
+    public static Showtime fromDtoToShowtime(ShowtimeRequestDTO showtimeDTO) {
         Showtime showtime = new Showtime();
         showtime.setMovieId(showtimeDTO.getMovieId());
         showtime.setPrice(showtimeDTO.getPrice());

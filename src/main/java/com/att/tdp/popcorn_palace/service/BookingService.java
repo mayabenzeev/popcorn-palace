@@ -40,7 +40,7 @@ public class BookingService {
      * @param bookingDTO
      * @return Booking object
      */
-    private static Booking fromDtoToBooking(BookingRequestDTO bookingDTO) {
+    public static Booking fromDtoToBooking(BookingRequestDTO bookingDTO) {
         Booking booking = new Booking();
         booking.setUserId(bookingDTO.getUserId());
         booking.setShowtimeId(bookingDTO.getShowtimeId());
