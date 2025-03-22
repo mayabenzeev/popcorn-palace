@@ -13,9 +13,9 @@ public interface ShowTimeRepository extends JpaRepository<ShowTime, Long> {
     // find overlapping show times in the same theater that are not the same show time
     @Query("""
             SELECT st FROM ShowTime st 
-            WHERE s.theater = :theater
-            AND (s.startTime < :endTime AND s.endTime > :startTime)
-            AND (s.id <> :currentId)""")
+            WHERE st.theater = :theater
+            AND (st.startTime < :endTime AND st.endTime > :startTime)
+            AND (st.id <> :currentId)""")
     Optional<ShowTime> findOverlappingShowTimes(@Param("currentId") Long id,
                                                 @Param("theater") String theater,
                                                 @Param("startTime") OffsetDateTime startTime,
