@@ -14,12 +14,14 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.util.Optional;
 
+/**
+ * Service class for managing showtimes.
+ */
 @Service
 public class ShowtimeService {
 
     @Autowired
     private ShowtimeRepository showtimeRepository;
-
     @Autowired
     private MovieRepository movieRepository;
 

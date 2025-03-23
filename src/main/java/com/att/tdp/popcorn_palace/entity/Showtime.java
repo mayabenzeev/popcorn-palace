@@ -10,6 +10,9 @@ import lombok.*;;
 @AllArgsConstructor
 @Entity
 @Table(name = "showtimes")
+/**
+ * entity class representing a showtime
+ */
 public class Showtime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,22 +31,21 @@ public class Showtime {
     @OneToMany(mappedBy = "showtime", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Booking> bookings; // hold this field to be able to delete all bookings related to this showtime
 
+    /** setters */
     public void setId(Long id) { this.id = id;}
     public void setPrice(Float price) { this.price = price; }
     //    public void setMovieId(Long movieId) { this.movieId = movieId; }
     public void setMovie(Movie movie) { this.movie = movie; }
     public void setTheater(String theater) { this.theater = theater; }
     public void setStartTime(OffsetDateTime startTime) { this.startTime = startTime; }
-
     public void setEndTime(OffsetDateTime endTime) { this.endTime = endTime; }
 
+    /** getters */
     public Long getId() { return this.id; }
     public Float getPrice() { return this.price;}
     public Movie getMovie() { return this.movie; }
     //    public Long getMovieId() { return this.movieId; }
     public String getTheater() {return this.theater; }
     public OffsetDateTime getStartTime() { return this.startTime; }
-
     public OffsetDateTime getEndTime() {return this.endTime;}
-
 }

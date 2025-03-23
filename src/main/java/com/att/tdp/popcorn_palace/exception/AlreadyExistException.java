@@ -5,10 +5,7 @@ package com.att.tdp.popcorn_palace.exception;
  * (based on specific criteria)
  */
 public class AlreadyExistException extends RuntimeException{
-
         public AlreadyExistException(String message) {
             super(message);
         }
 }
-
-//TODO: exception handler

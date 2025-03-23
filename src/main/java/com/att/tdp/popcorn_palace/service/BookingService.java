@@ -13,9 +13,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+/**
+ * Repository class for managing bookings.
+ */
 @Service
 public class BookingService {
-
     @Autowired
     private BookingRepository bookingRepository;
     @Autowired

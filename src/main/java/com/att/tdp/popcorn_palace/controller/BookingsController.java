@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * REST controller for managing bookings.
+ */
 @RestController
 @RequestMapping("/bookings")
 public class BookingsController {

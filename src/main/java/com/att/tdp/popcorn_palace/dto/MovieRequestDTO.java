@@ -1,11 +1,12 @@
 package com.att.tdp.popcorn_palace.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
 
 import java.time.Year;
 
+/**
+ * Data Transfer Object for movies requests.
+ */
 public class MovieRequestDTO {
     @NotBlank(message = "Title is required")
     private String title;
@@ -34,23 +35,25 @@ public class MovieRequestDTO {
         this.releaseYear = releaseYear;
     }
 
+    /**
+     * Validates that the release year is not in the future.
+     */
     @AssertTrue(message = "Release year cannot be in the future")
     @JsonIgnore
     public boolean isValidReleaseYear() {
         return this.releaseYear != null && this.releaseYear <= Year.now().getValue();
     }
+
+    /** setters */
     public void setTitle(String newTitle) {this.title = newTitle;}
     public void setGenre(String newGenre) {this.genre = newGenre;}
     public void setDuration(Integer newDuration) { this.duration = newDuration;}
     public void setRating(Float newRating) { this.rating = newRating;}
     public void setReleaseYear(Integer newReleaseYear) { this.releaseYear = newReleaseYear;}
 
-    public String getTitle() {
-        return this.title;
-    }
-    public String getGenre() {
-        return this.genre;
-    }
+    /** getters */
+    public String getTitle() {return this.title;}
+    public String getGenre() {return this.genre;}
     public Integer getDuration() { return this.duration; }
     public Float getRating() { return this.rating; }
     public Integer getReleaseYear() {

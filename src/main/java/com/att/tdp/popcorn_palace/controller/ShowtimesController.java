@@ -2,17 +2,15 @@ package com.att.tdp.popcorn_palace.controller;
 
 import com.att.tdp.popcorn_palace.dto.ShowtimeRequestDTO;
 import com.att.tdp.popcorn_palace.dto.ShowtimeResponseDTO;
-import com.att.tdp.popcorn_palace.entity.Showtime;
-import com.att.tdp.popcorn_palace.repository.ShowtimeRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.att.tdp.popcorn_palace.service.ShowtimeService;
 
-import java.util.HashMap;
-import java.util.Map;
-
+/**
+ * REST controller for managing showtimes.
+ */
 @RestController
 @RequestMapping("/showtimes")
 public class ShowtimesController {
@@ -44,7 +42,4 @@ public class ShowtimesController {
     public ResponseEntity<Void> deleteShowtime(@PathVariable Long id) {
         showtimeService.deleteShowtime(id);
         return ResponseEntity.ok().build();    }
-
-
-
 }

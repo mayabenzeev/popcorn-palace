@@ -12,6 +12,9 @@ import java.util.List;
         uniqueConstraints = {@UniqueConstraint(
                 columnNames = {"title"})}) //to prevent inserting two movies with the same title (the defined rule)
 
+/**
+ * entity class representing a movie
+ */
 public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,18 +32,18 @@ public class Movie {
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Showtime> showtimes; // hold this field to be able to delete all showtimes related to this movie
 
+    /** setters */
     public void setTitle(String newTitle) {this.title = newTitle;}
     public void setGenre(String newGenre) {this.genre = newGenre;}
     public void setDuration(Integer newDuration) { this.duration = newDuration;}
     public void setRating(Float newRating) { this.rating = newRating;}
     public void setReleaseYear(Integer newReleaseYear) { this.releaseYear = newReleaseYear;}
 
+    /** getters */
     public Long getId() { return this.id;}
     public String getTitle() {return this.title;}
     public String getGenre() {return this.genre;}
     public Integer getDuration() { return this.duration; }
     public Float getRating() { return this.rating; }
     public Integer getReleaseYear() {return this.releaseYear;}
-
-
 }

@@ -1,10 +1,11 @@
 package com.att.tdp.popcorn_palace.dto;
 
 import com.att.tdp.popcorn_palace.entity.Showtime;
-
 import java.time.OffsetDateTime;
-import java.util.UUID;
 
+/**
+ * Data Transfer Object for showtime responses.
+ */
 public class ShowtimeResponseDTO {
     private Long id;
     private Float price;
@@ -22,6 +23,7 @@ public class ShowtimeResponseDTO {
         this.endTime = showtime.getEndTime();
     }
 
+    /** getters */
     public Float getPrice() { return this.price;}
     public Long getMovieId() { return this.movieId; }
     public String getTheater() {return this.theater; }

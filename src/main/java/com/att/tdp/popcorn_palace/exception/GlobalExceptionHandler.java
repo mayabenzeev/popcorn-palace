@@ -11,7 +11,10 @@ import java.time.ZonedDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
-
+/**
+ * The type Global exception handler.
+ * Handles all exceptions in the application and returns a unified response format.
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 

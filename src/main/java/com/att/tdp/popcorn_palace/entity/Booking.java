@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
+/**
+ * entity class representing a booking
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -19,18 +22,17 @@ public class Booking {
     @ManyToOne
     @JoinColumn(name = "showtime_id", nullable = false)
     private Showtime showtime; // maintain the showtime entity using the foreign key column showtime_id
-
-    //    @Column(name = "showtime_id", nullable = false) // showtime id cannot be null
-    //    private Long showtimeId; // foreign key
     @Column(name = "seat_number", nullable = false) // seat number cannot be null
     private Integer seatNumber;
 
+    /** setters */
     public void setUserId(UUID userId) { this.userId = userId; }
     public void setShowtime(Showtime showtime) { this.showtime = showtime; }
     public void setSeatNumber(Integer seatNumber) { this.seatNumber = seatNumber; }
+
+    /** getters */
     public UUID getId() { return this.id; }
     public UUID getUserId() { return this.userId; }
     public Showtime getShowtime() { return this.showtime; }
-
     public Integer getSeatNumber() { return this.seatNumber; }
 }

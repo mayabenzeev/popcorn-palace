@@ -4,13 +4,15 @@ import com.att.tdp.popcorn_palace.dto.MovieRequestDTO;
 import com.att.tdp.popcorn_palace.entity.Movie;
 import com.att.tdp.popcorn_palace.service.MovieService;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * REST controller for managing movies.
+ */
 @RestController
 @RequestMapping("/movies") // base URL for all endpoints in movies controller
 public class MoviesController {
@@ -43,6 +45,4 @@ public class MoviesController {
         movieService.deleteMovie(title);
         return ResponseEntity.ok().build();
     }
-
-
 }

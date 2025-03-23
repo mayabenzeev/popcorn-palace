@@ -7,6 +7,9 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
+/**
+ * Data Transfer Object for booking requests.
+ */
 @JsonIgnoreProperties(ignoreUnknown = false)
 public class BookingRequestDTO {
 
@@ -28,11 +31,12 @@ public class BookingRequestDTO {
         this.seatNumber = seatNumber;
     }
 
+    /** getters */
     public UUID getUserId() { return this.userId; }
     public Long getShowtimeId() { return this.showtimeId; }
-
     public Integer getSeatNumber() { return this.seatNumber; }
 
+    /** setters */
     public void setUserId(UUID userId) { this.userId = userId; }
     public void setShowtimeId(Long showtimeId) { this.showtimeId = showtimeId; }
     public void setSeatNumber(Integer seatNumber) { this.seatNumber = seatNumber; }
