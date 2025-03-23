@@ -1,11 +1,14 @@
 package com.att.tdp.popcorn_palace.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.OffsetDateTime;
+import java.time.Year;
 
 @JsonIgnoreProperties(ignoreUnknown = false)
 
@@ -31,6 +34,16 @@ public class ShowtimeRequestDTO {
         this.theater = theater;
         this.startTime = startTime;
         this.endTime = endTime;
+    }
+    @AssertTrue(message = "Start time cannot be in the past")
+    @JsonIgnore
+    public boolean isValidStartTime() {
+        return this.startTime != null && this.startTime.isAfter(OffsetDateTime.now());
+    }
+    @AssertTrue(message = "End time cannot be in the past")
+    @JsonIgnore
+    public boolean isValidEndTime() {
+        return this.endTime != null && this.endTime.isAfter(OffsetDateTime.now());
     }
 
     public void setPrice(Float price) { this.price = price; }

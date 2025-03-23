@@ -13,17 +13,17 @@ public class PopcornPalaceApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(PopcornPalaceApplication.class, args);
 	}
-	@Bean
-	CommandLineRunner run(MovieRepository movieRepository) {
-		return args -> {
-			Movie movie = new Movie();
-			movie.setTitle("Test Movie");
-			movie.setGenre("Test");
-			movie.setDuration(120);
-			movie.setRating(6.1f);
-			movie.setReleaseYear(2001);
-			movieRepository.save(movie);
-		};
-	}
+//	@Bean
+//	CommandLineRunner run(MovieRepository movieRepository) {
+//		return args -> {
+//			Movie movie = new Movie();
+//			movie.setTitle("Test Movie");
+//			movie.setGenre("Test");
+//			movie.setDuration(120);
+//			movie.setRating(6.1f);
+//			movie.setReleaseYear(2001);
+//			movieRepository.save(movie);
+//		};
+//	}
 
 }

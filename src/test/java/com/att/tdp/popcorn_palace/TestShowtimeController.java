@@ -58,6 +58,19 @@ public class TestShowtimeController {
                 .andExpect(status().isBadRequest());
     }
 
+    // add showtime that has already started test
+    @Test
+    @DisplayName("Should not add a showtime that has already started - 400")
+    public void addShowtimeThatHasAlreadyStarted() throws Exception {
+        ShowtimeRequestDTO dto = new ShowtimeRequestDTO(15f, 1L, "Theater 1",
+                OffsetDateTime.now().minusHours(1), OffsetDateTime.now().plusHours(1));
+        // mock a post request to /showtimes with a body of dto
+        mockMvc.perform(post("/showtimes")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isBadRequest());
+    }
+
     /**
      * update showtime tests
      */
