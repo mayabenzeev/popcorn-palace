@@ -1,13 +1,24 @@
 package com.att.tdp.popcorn_palace;
 
-public class TestMovieController {
+public class TestShowtimeController {
     /**
-     * add booking success test
-     * add booking with a non uuid format user id test
-     * add booking with a showtime that does not exist test
-     * add booking with a showtime that has already started test
-     * add booking to a showtime with a taken seat test
-     * add booking with a too big seat number test
+     * add showtime with null values test
+     * add showtime with empty values test
+     * add showtime with invalid movie id test
+     * add showtime with start time after end time test
+     * add showtime with time interval < movie duration test
+     * add showtime with time interval = movie duration test
+     * add showtime with wrong time format start time test
      *
+
+     *
+     * update showtime with empty values test
+     * update showtime start time to be after end time test
+     * update showtime start time == end time test
+     * update showtime start time with wrong time format test
+     * update showtime price to be negative test
+     * update showtime theater to one with an overlapping time interval test
+     *
+     * delete showtime that has bookings test
      */
 }
