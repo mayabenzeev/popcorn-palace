@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 
 import java.time.Year;
 
-@JsonIgnoreProperties(ignoreUnknown = false)
 public class MovieRequestDTO {
     @NotBlank(message = "Title is required")
     private String title;
