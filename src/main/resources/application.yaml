@@ -15,6 +15,9 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+  jackson:
+    deserialization:
+        fail-on-unknown-properties: true
   sql:
     init:
       mode: never
