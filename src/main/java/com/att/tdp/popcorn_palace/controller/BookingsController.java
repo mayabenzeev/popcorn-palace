@@ -1,7 +1,6 @@
 package com.att.tdp.popcorn_palace.controller;
 
 import com.att.tdp.popcorn_palace.dto.BookingRequestDTO;
-import com.att.tdp.popcorn_palace.entity.Booking;
 import com.att.tdp.popcorn_palace.service.BookingService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/bookings")
@@ -23,8 +25,7 @@ public class BookingsController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> bookTicket(@RequestBody @Valid BookingRequestDTO bookingDTO) {
-        bookingService.bookTicket(bookingDTO);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Map<String, UUID>> bookTicket(@RequestBody @Valid BookingRequestDTO bookingDTO) {
+        return ResponseEntity.ok(Map.of("bookingId", bookingService.bookTicket(bookingDTO).getId()));
     }
 }

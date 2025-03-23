@@ -28,7 +28,9 @@ public class Booking {
     public void setUserId(UUID userId) { this.userId = userId; }
     public void setShowtime(Showtime showtime) { this.showtime = showtime; }
     public void setSeatNumber(Integer seatNumber) { this.seatNumber = seatNumber; }
+    public UUID getId() { return this.id; }
     public UUID getUserId() { return this.userId; }
     public Showtime getShowtime() { return this.showtime; }
+
     public Integer getSeatNumber() { return this.seatNumber; }
 }
