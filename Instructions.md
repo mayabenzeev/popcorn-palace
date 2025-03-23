@@ -51,7 +51,7 @@ Database: popcorn-palace
 ```
 Or use the postgres terminal from the app container:
 ```bash
-docker exec -it popcorn-palace-db-1 psql -U popcorn-palace -d popcorn-palace
+docker exec -it popcorn-palace-db psql -U popcorn-palace -d popcorn-palace
 ```
 5. To stop the application:
 ```bash

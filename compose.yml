@@ -1,6 +1,7 @@
 services:
   db:
     image: postgres
+    container_name: popcorn-palace-db
     restart: always
     environment:
       POSTGRES_USER: popcorn-palace
