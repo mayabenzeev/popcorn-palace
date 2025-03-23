@@ -15,8 +15,8 @@ CREATE TABLE showtimes (
     id SERIAL PRIMARY KEY,
     price FLOAT NOT NULL,
     theater VARCHAR(255) NOT NULL,
-    start_time TIMESTAMPZ NOT NULL,
-    end_time TIMESTAMPZ NOT NULL,
+    start_time TIMESTAMPTZ NOT NULL,
+    end_time TIMESTAMPTZ NOT NULL,
     movie_id INTEGER NOT NULL,
     CONSTRAINT fk_showtime_movie FOREIGN KEY (movie_id) REFERENCES movies(id) ON DELETE CASCADE
 );
