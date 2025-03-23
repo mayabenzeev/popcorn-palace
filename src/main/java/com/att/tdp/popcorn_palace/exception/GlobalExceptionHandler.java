@@ -1,5 +1,6 @@
 package com.att.tdp.popcorn_palace.exception;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -55,11 +56,12 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleValidationErrors(MethodArgumentNotValidException e) {
-        // beautify all validation errors
+        // return one validation error
         String errorMessage = e.getFieldErrors()
                 .stream()
+                .findFirst()
                 .map(fieldError -> fieldError.getDefaultMessage())
-                .collect(Collectors.joining(", "));
+                .orElse("Validation error");
         return createResponseBody(errorMessage, HttpStatus.BAD_REQUEST);
     }
 
@@ -70,8 +72,13 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = HttpMessageNotReadableException.class)
     public ResponseEntity<?> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
-        return createResponseBody("Invalid JSON format " +
-                e.getMostSpecificCause(), HttpStatus.BAD_REQUEST);
+        String message = "Invalid JSON format";
+        Throwable cause = e.getCause();
+        if (cause instanceof InvalidFormatException formatEx) {
+            message += ": " + formatEx.getOriginalMessage();
+        }
+
+        return createResponseBody(message, HttpStatus.BAD_REQUEST);
     }
 
     /**

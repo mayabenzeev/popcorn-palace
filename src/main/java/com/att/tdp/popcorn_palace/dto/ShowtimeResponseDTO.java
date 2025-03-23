@@ -24,6 +24,7 @@ public class ShowtimeResponseDTO {
     }
 
     /** getters */
+    public Long getId() { return this.id; }
     public Float getPrice() { return this.price;}
     public Long getMovieId() { return this.movieId; }
     public String getTheater() {return this.theater; }
