@@ -155,7 +155,7 @@ public class TestMovieController {
 
     /** delete movie tests */
 
-    // delete movie database error test
+    // delete movie database error test - tests how controller behaves when there is a service exception
     @Test
     @DisplayName("Should return 500 when database error occurs upon deletion - 500")
     public void deleteMovieDatabaseError() throws Exception {

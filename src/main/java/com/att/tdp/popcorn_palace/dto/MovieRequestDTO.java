@@ -1,4 +1,5 @@
 package com.att.tdp.popcorn_palace.dto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -34,6 +35,7 @@ public class MovieRequestDTO {
     }
 
     @AssertTrue(message = "Release year cannot be in the future")
+    @JsonIgnore
     public boolean isValidReleaseYear() {
         return this.releaseYear != null && this.releaseYear <= Year.now().getValue();
     }
