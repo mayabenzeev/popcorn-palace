@@ -1,0 +1,11 @@
+target/
+.idea/
+*.iml
+*.log
+.DS_Store
+Thumbs.db
+.git
+.gitignore
+.vscode/
+*.swp
+.dockerignore

@@ -14,3 +14,27 @@ services:
       - target: 5432
         published: 5432
         protocol: tcp
+    networks:
+      - popcorn-palace-network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/popcorn-palace
+      SPRING_DATASOURCE_USERNAME: popcorn-palace
+      SPRING_DATASOURCE_PASSWORD: popcorn-palace
+    ports:
+      - target: 8080
+        published: 8080
+        protocol: tcp
+    networks:
+        - popcorn-palace-network
+    restart: always
+
+networks:
+  popcorn-palace-network:
+      driver: bridge
