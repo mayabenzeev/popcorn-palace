@@ -49,10 +49,9 @@ Username: popcorn-palace
 Password: popcorn-palace
 Database: popcorn-palace
 ```
-Or use the postgres terminal from the app container:
-```bash
-docker exec -it popcorn-palace-db psql -U popcorn-palace -d popcorn-palace
-```
+Via terminal with psql CLI: `psql -h localhost -p 5432 -U popcorn-palace -d popcorn-palace` prompted for the password: popcorn-palace
+Or via inside app container: `docker exec -it popcorn-palace-db psql -U popcorn-palace -d popcorn-palace` 
+(get out with `\q`)
 5. To stop the application:
 ```bash
 docker compose down
