@@ -2,6 +2,9 @@ package com.att.tdp.popcorn_palace.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -23,6 +26,8 @@ public class Movie {
     private Float rating;
     @Column(name = "release_year", nullable = false)
     private Integer releaseYear;
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Showtime> showtimes; // hold this field to be able to delete all showtimes related to this movie
 
     public void setTitle(String newTitle) {this.title = newTitle;}
     public void setGenre(String newGenre) {this.genre = newGenre;}

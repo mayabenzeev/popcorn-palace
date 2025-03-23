@@ -14,22 +14,21 @@ public class Booking {
     @Id
     @UuidGenerator
     private UUID id;
-
     @Column(name = "user_id", nullable = false) // user id cannot be null
     private UUID userId;
+    @ManyToOne
+    @JoinColumn(name = "showtime_id", nullable = false)
+    private Showtime showtime; // maintain the showtime entity using the foreign key column showtime_id
 
-    // foreign key
-    @Column(name = "showtime_id", nullable = false) // showtime id cannot be null
-    private Long showtimeId;
+    //    @Column(name = "showtime_id", nullable = false) // showtime id cannot be null
+    //    private Long showtimeId; // foreign key
     @Column(name = "seat_number", nullable = false) // seat number cannot be null
     private Integer seatNumber;
 
     public void setUserId(UUID userId) { this.userId = userId; }
-    public void setShowtimeId(Long showtimeId) { this.showtimeId = showtimeId; }
+    public void setShowtime(Showtime showtime) { this.showtime = showtime; }
     public void setSeatNumber(Integer seatNumber) { this.seatNumber = seatNumber; }
-
     public UUID getUserId() { return this.userId; }
-    public Long getShowtimeId() { return this.showtimeId; }
+    public Showtime getShowtime() { return this.showtime; }
     public Integer getSeatNumber() { return this.seatNumber; }
-
 }

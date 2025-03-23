@@ -40,13 +40,18 @@ public class TestBookingService {
     @Test
     @DisplayName("Should add a booking successfully - 200")
     void addBookingSuccess() {
+        // create booking with an existing showtime
+        Showtime showtime = new Showtime();
+        showtime.setId(1L);
         BookingRequestDTO dto = new BookingRequestDTO(UUID.randomUUID(), 1L, 30);
-        // there is a showtime with this id in the DB
-        given(showtimeRepository.findById(dto.getShowtimeId())).willReturn(Optional.of(new Showtime()));
-        // booking to the show and seat number does not exist in the DB
-        given(bookingRepository.findByShowtimeIdAndSeatNumber(dto.getShowtimeId(), dto.getSeatNumber())).willReturn(Optional.empty());
 
-        Booking savedBooking = BookingService.fromDtoToBooking(dto);
+        // there is a showtime with this id in the DB
+        given(showtimeRepository.findById(dto.getShowtimeId())).willReturn(Optional.of(showtime));
+        // booking to the show and seat number does not exist in the DB
+        given(bookingRepository.findByShowtimeIdAndSeatNumber(dto.getShowtimeId(), dto.getSeatNumber()))
+                .willReturn(Optional.empty());
+
+        Booking savedBooking = BookingService.fromDtoToBooking(dto, showtime);
         // booking has saved in the DB successfully
         given(bookingRepository.save(any(Booking.class))).willReturn(savedBooking);
 
@@ -54,7 +59,7 @@ public class TestBookingService {
 
         // saved booking is with the correct values
         assertEquals(dto.getUserId(), result.getUserId());
-        assertEquals(dto.getShowtimeId(), result.getShowtimeId());
+        assertEquals(dto.getShowtimeId(), result.getShowtime().getId());
         assertEquals(dto.getSeatNumber(), result.getSeatNumber());
         verify(bookingRepository).save(any(Booking.class)); //make sure "save" has been called
     }

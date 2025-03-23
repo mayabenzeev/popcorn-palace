@@ -49,7 +49,9 @@ public class ShowtimeService {
     public Showtime addShowtime(ShowtimeRequestDTO showtimeDTO) {
         validateShowtime(showtimeDTO, null); // validate the new showtime
 
-        return showtimeRepository.save(fromDtoToShowtime(showtimeDTO)); // save show time to db
+        Movie dbMovie = returnMovieIfExist(showtimeDTO.getMovieId()); // check if movie exists
+
+        return showtimeRepository.save(fromDtoToShowtime(showtimeDTO, dbMovie)); // save show time to db
     }
 
     /**
@@ -64,12 +66,14 @@ public class ShowtimeService {
         if (!dbShowtime.isPresent()) {
             throw new NotFoundException(String.format("Showtime with id %d does not exist", showtimeId));
         }
+        // check if movie exists
+        Movie dbMovie = returnMovieIfExist(updatedShowtimeDTO.getMovieId());
 
         validateShowtime(updatedShowtimeDTO, showtimeId); // validate the updates
 
         // Update show time to the new values
         Showtime existingShowtime = dbShowtime.get(); // get existing show time from the optional object
-        existingShowtime.setMovieId(updatedShowtimeDTO.getMovieId());
+        existingShowtime.setMovie(dbMovie);
         existingShowtime.setPrice(updatedShowtimeDTO.getPrice());
         existingShowtime.setTheater(updatedShowtimeDTO.getTheater());
         existingShowtime.setStartTime(updatedShowtimeDTO.getStartTime());
@@ -163,9 +167,9 @@ public class ShowtimeService {
      * @param showtimeDTO
      * @return Showtime object
      */
-    public static Showtime fromDtoToShowtime(ShowtimeRequestDTO showtimeDTO) {
+    public static Showtime fromDtoToShowtime(ShowtimeRequestDTO showtimeDTO, Movie movie){
         Showtime showtime = new Showtime();
-        showtime.setMovieId(showtimeDTO.getMovieId());
+        showtime.setMovie(movie);
         showtime.setPrice(showtimeDTO.getPrice());
         showtime.setTheater(showtimeDTO.getTheater());
         showtime.setStartTime(showtimeDTO.getStartTime());
