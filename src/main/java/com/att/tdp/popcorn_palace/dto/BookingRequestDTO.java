@@ -1,12 +1,13 @@
 package com.att.tdp.popcorn_palace.dto;
 
-import jakarta.persistence.Column;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
+@JsonIgnoreProperties(ignoreUnknown = false)
 public class BookingRequestDTO {
 
     @NotNull(message = "User ID is required")
@@ -17,6 +18,15 @@ public class BookingRequestDTO {
     @Min(value = 1, message = "Seat number must be greater than 0")
     @Max(value = 1000, message = "Seats are limited to 1000 seats") // limit the seat number to 1000
     private Integer seatNumber;
+
+    public BookingRequestDTO() {
+    }
+
+    public BookingRequestDTO(UUID userId, Long showtimeId, Integer seatNumber) {
+        this.userId = userId;
+        this.showtimeId = showtimeId;
+        this.seatNumber = seatNumber;
+    }
 
     public UUID getUserId() { return this.userId; }
     public Long getShowtimeId() { return this.showtimeId; }

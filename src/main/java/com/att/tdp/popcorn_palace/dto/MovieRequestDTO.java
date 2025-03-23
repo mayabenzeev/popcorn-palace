@@ -1,10 +1,11 @@
 package com.att.tdp.popcorn_palace.dto;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 
 import java.time.Year;
 
-@AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = false)
 public class MovieRequestDTO {
     @NotBlank(message = "Title is required")
     private String title;
@@ -22,9 +23,20 @@ public class MovieRequestDTO {
     @Min(value = 1000, message = "Release year must be greater than 1000")
     private Integer releaseYear;
 
+    public MovieRequestDTO() {
+    }
+
+    public MovieRequestDTO(String title, String genre, Integer duration, Float rating, Integer releaseYear) {
+        this.title = title;
+        this.genre = genre;
+        this.duration = duration;
+        this.rating = rating;
+        this.releaseYear = releaseYear;
+    }
+
     @AssertTrue(message = "Release year cannot be in the future")
     public boolean isValidReleaseYear() {
-        return this.releaseYear <= Year.now().getValue();
+        return this.releaseYear != null && this.releaseYear <= Year.now().getValue();
     }
     public void setTitle(String newTitle) {this.title = newTitle;}
     public void setGenre(String newGenre) {this.genre = newGenre;}

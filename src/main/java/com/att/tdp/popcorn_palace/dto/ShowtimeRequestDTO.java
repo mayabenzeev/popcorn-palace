@@ -1,14 +1,15 @@
 package com.att.tdp.popcorn_palace.dto;
 
-import jakarta.persistence.Column;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.OffsetDateTime;
 
-public class ShowtimeRequestDTO {
+@JsonIgnoreProperties(ignoreUnknown = false)
 
+public class ShowtimeRequestDTO {
     @NotNull(message = "Price is required")
     @DecimalMin(value = "0.0", message = "Price must be positive")
     private Float price;
@@ -20,6 +21,17 @@ public class ShowtimeRequestDTO {
     private OffsetDateTime startTime;
     @NotNull(message = "End time is required")
     private OffsetDateTime endTime;
+
+    public ShowtimeRequestDTO() {
+    }
+
+    public ShowtimeRequestDTO(Float price, Long movieId, String theater, OffsetDateTime startTime, OffsetDateTime endTime) {
+        this.price = price;
+        this.movieId = movieId;
+        this.theater = theater;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
 
     public void setPrice(Float price) { this.price = price; }
     public void setMovieId(Long movieId) { this.movieId = movieId; }
