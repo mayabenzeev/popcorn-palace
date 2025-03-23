@@ -58,8 +58,8 @@ public class MovieService {
             throw new NotFoundException(String.format("Movie '%s' does not exist", title));
         }
 
-        // check if can change the movie title (if the new title is not already exists)
-        if (movieRepository.findByTitle(updatedMovieDTO.getTitle()).isPresent()) {
+        // check if can change the movie title (if the new title is different and not already exists)
+        if (title != updatedMovieDTO.getTitle() && movieRepository.findByTitle(updatedMovieDTO.getTitle()).isPresent()) {
             throw new AlreadyExistException(String.format(
                     "Movie with a title '%s' already exists", updatedMovieDTO.getTitle()));
         }
