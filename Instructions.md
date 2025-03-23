@@ -33,7 +33,7 @@ The application supports:
 
 1. Clone the repo:
 ```bash
-git clone https://github.com/mayabenzeev/Movie_Ticket_Booking_System.git
+git clone https://github.com/mayabenzeev/popcorn-palace.git
 cd popcorn-palace
 ```
 2. Build the application:

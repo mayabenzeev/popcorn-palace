@@ -20,4 +20,4 @@ spring:
         fail-on-unknown-properties: true
   sql:
     init:
-      mode: never
+      mode: always
