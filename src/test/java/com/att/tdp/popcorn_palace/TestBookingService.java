@@ -4,7 +4,6 @@ import com.att.tdp.popcorn_palace.dto.BookingRequestDTO;
 import com.att.tdp.popcorn_palace.entity.Booking;
 import com.att.tdp.popcorn_palace.entity.Showtime;
 import com.att.tdp.popcorn_palace.exception.AlreadyExistException;
-import com.att.tdp.popcorn_palace.exception.BadRequestException;
 import com.att.tdp.popcorn_palace.exception.NotFoundException;
 import com.att.tdp.popcorn_palace.repository.BookingRepository;
 import com.att.tdp.popcorn_palace.repository.ShowtimeRepository;
@@ -15,14 +14,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
