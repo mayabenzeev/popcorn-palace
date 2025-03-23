@@ -4,6 +4,7 @@ import com.att.tdp.popcorn_palace.dto.ShowtimeRequestDTO;
 import com.att.tdp.popcorn_palace.entity.Movie;
 import com.att.tdp.popcorn_palace.entity.Showtime;
 import com.att.tdp.popcorn_palace.exception.AlreadyExistException;
+import com.att.tdp.popcorn_palace.exception.BadRequestException;
 import com.att.tdp.popcorn_palace.exception.NotFoundException;
 import com.att.tdp.popcorn_palace.repository.MovieRepository;
 import com.att.tdp.popcorn_palace.repository.ShowtimeRepository;
@@ -14,12 +15,15 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.MediaType;
 
 import java.time.OffsetDateTime;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class TestShowtimeService {
     @Mock
@@ -40,10 +44,14 @@ public class TestShowtimeService {
     @Test
     @DisplayName("Should add a showtime successfully - 200")
     void addShowtimeSuccess() {
+        Movie movie = new Movie();
+        movie.setDuration(120); // 2 hours
+
         ShowtimeRequestDTO dto = new ShowtimeRequestDTO(30f, 1L, "Theater 1",
                 OffsetDateTime.now().plusHours(1), OffsetDateTime.now().plusHours(3));
+
         // movie exists in the DB
-        given(movieRepository.findById(dto.getMovieId())).willReturn(Optional.of(new Movie()));
+        given(movieRepository.findById(dto.getMovieId())).willReturn(Optional.of(movie));
         // there is no overlapping showtime in the DB
         given(showtimeRepository.findOverlappingShowtimes(null, "Theater 1",
                 dto.getStartTime(), dto.getEndTime()))
@@ -61,16 +69,77 @@ public class TestShowtimeService {
     @Test
     @DisplayName("Should throw an AlreadyExistException when adding a showtime that overlaps an existing one - 409")
     void showtimeWithOverlappingTheaterAndTimeIntervalThrowsException() {
+        Movie movie = new Movie();
+        movie.setDuration(120); // 2 hours
+
         ShowtimeRequestDTO dto = new ShowtimeRequestDTO(30f, 1L, "Theater 1",
                 OffsetDateTime.now().plusHours(1), OffsetDateTime.now().plusHours(3));
         // movie exists in the DB
-        given(movieRepository.findById(dto.getMovieId())).willReturn(Optional.of(new Movie()));
+        given(movieRepository.findById(dto.getMovieId())).willReturn(Optional.of(movie));
         // there is an overlapping showtime in the DB
         given(showtimeRepository.findOverlappingShowtimes(null, "Theater 1",
                 dto.getStartTime(), dto.getEndTime()))
                 .willReturn(Optional.of(new Showtime()));
 
         assertThrows(AlreadyExistException.class, () -> showtimeService.addShowtime(dto));
+    }
+
+    // add showtime with start time after end time test
+    @Test
+    @DisplayName("Should throw a BadRequestException when adding a showtime with start time after end time - 400")
+    void addShowtimeWithStartTimeAfterEndTimeThrowsException() {
+        Movie movie = new Movie();
+        movie.setDuration(120); // 2 hours
+
+        ShowtimeRequestDTO dto = new ShowtimeRequestDTO(30f, 1L, "Theater 1",
+                OffsetDateTime.now().plusHours(3), OffsetDateTime.now().plusHours(1));
+
+        // movie exists in the DB
+        given(movieRepository.findById(dto.getMovieId())).willReturn(Optional.of(movie));
+
+        assertThrows(BadRequestException.class, () -> showtimeService.addShowtime(dto));
+    }
+
+    // add showtime with time interval < movie duration test
+    @Test
+    @DisplayName("Should throw a BadRequestException when adding a showtime with time interval < movie duration - 400")
+    void addShowtimeWithTimeIntervalLessThanMovieDurationThrowsException() {
+        Movie movie = new Movie();
+        movie.setDuration(120);
+
+        ShowtimeRequestDTO dto = new ShowtimeRequestDTO(30f, 1L, "Theater 1",
+                OffsetDateTime.now().plusHours(1), OffsetDateTime.now().plusHours(1).plusMinutes(20));
+
+        // movie exists in the DB, there is no overlapping showtime
+        given(movieRepository.findById(dto.getMovieId())).willReturn(Optional.of(movie));
+        given(showtimeRepository.findOverlappingShowtimes(null, "Theater 1",
+                dto.getStartTime(), dto.getEndTime()))
+                .willReturn(Optional.empty());
+
+        assertThrows(BadRequestException.class, () -> showtimeService.addShowtime(dto)); // should throw an exception
+    }
+
+    // add showtime with time interval = movie duration test
+    @Test
+    @DisplayName("Should add a showtime with time interval = movie duration successfully - 200")
+    void addShowtimeWithTimeIntervalEqualToMovieDurationSuccess() {
+        Movie movie = new Movie();
+        movie.setDuration(120); // 2 hours
+
+        ShowtimeRequestDTO dto = new ShowtimeRequestDTO(30f,1L, "Theater 1",
+                OffsetDateTime.now().plusHours(1), OffsetDateTime.now().plusHours(1).plusMinutes(movie.getDuration()));
+
+        // movie exists in the DB, there is no overlapping showtime
+        given(movieRepository.findById(dto.getMovieId())).willReturn(Optional.of(movie));
+        given(showtimeRepository.findOverlappingShowtimes(null, "Theater 1",
+                dto.getStartTime(), dto.getEndTime()))
+                .willReturn(Optional.empty());
+        // showtime has saved in the DB successfully
+        given(showtimeRepository.save(any(Showtime.class))).willReturn(new Showtime());
+
+        Showtime result = showtimeService.addShowtime(dto);
+        assertNotNull(result);
+        verify(showtimeRepository).save(any(Showtime.class)); // make sure save is called
     }
 
     /** test get showtimes */
@@ -107,16 +176,18 @@ public class TestShowtimeService {
     @Test
     @DisplayName("Should update a showtime time successfully - 200")
     void updateShowtimeSuccess() {
-        Long showtimeId = 1L;
-        Showtime existingShowtime = new Showtime(showtimeId, 30f, 1L, "Theater 1",
-                OffsetDateTime.now().plusHours(1), OffsetDateTime.now().plusHours(3));
+        Showtime existingShowtime = new Showtime();
+        Long showtimeId = existingShowtime.getId();
 
         ShowtimeRequestDTO dto = new ShowtimeRequestDTO(30f, 1L, "Theater 1",
                 OffsetDateTime.now().plusHours(2), OffsetDateTime.now().plusHours(4)); // new values
 
+        Movie movie = new Movie();
+        movie.setDuration(120); // 2 hours
+
         // showtime exists in the DB, movie exists in the DB,  there is no overlapping showtime
         given(showtimeRepository.findById(showtimeId)).willReturn(Optional.of(existingShowtime));
-        given(movieRepository.findById(dto.getMovieId())).willReturn(Optional.of(new Movie()));
+        given(movieRepository.findById(dto.getMovieId())).willReturn(Optional.of(movie));
         given(showtimeRepository.findOverlappingShowtimes(showtimeId, "Theater 1",
                 dto.getStartTime(), dto.getEndTime()))
                 .willReturn(Optional.empty());
@@ -155,6 +226,31 @@ public class TestShowtimeService {
         assertThrows(NotFoundException.class, () -> showtimeService.updateShowtime(1L, dto));
     }
 
+    // update showtime with overlapping theater and time interval test
+    @Test
+    @DisplayName("Should throw an AlreadyExistException when updating a showtime that overlaps an existing one - 409")
+    void updateShowtimeWithOverlappingTheaterAndTimeIntervalThrowsException() {
+        Showtime existingShowtime = new Showtime();
+        existingShowtime.setTheater("Theater 1");
+        existingShowtime.setStartTime(OffsetDateTime.now().plusHours(1));
+        existingShowtime.setEndTime(OffsetDateTime.now().plusHours(3));
+
+        ShowtimeRequestDTO dto = new ShowtimeRequestDTO(30f, 5L, "Theater 1",
+                OffsetDateTime.now().plusHours(2), OffsetDateTime.now().plusHours(4)); // new values
+
+        Movie movie = new Movie();
+        movie.setDuration(120); // 2 hours
+
+        // showtime exists in the DB, new showtime movieId exists in the DB, there is an overlapping showtime
+        given(showtimeRepository.findById(existingShowtime.getId())).willReturn(Optional.of(existingShowtime));
+        given(movieRepository.findById(dto.getMovieId())).willReturn(Optional.of(movie));
+        given(showtimeRepository.findOverlappingShowtimes(existingShowtime.getId(), existingShowtime.getTheater(),
+                dto.getStartTime(), dto.getEndTime()))
+                .willReturn(Optional.of(new Showtime()));
+
+        assertThrows(AlreadyExistException.class, () -> showtimeService.updateShowtime(existingShowtime.getId(), dto));
+    }
+
 
     /** test delete showtime */
     // delete showtime success test
@@ -182,24 +278,5 @@ public class TestShowtimeService {
         assertThrows(NotFoundException.class, () -> showtimeService.deleteShowtime(showtimeId));
     }
 
-    /**
-     * add showtime with null values test
-     * add showtime with empty values test
-     * add showtime with invalid movie id test
-     * add showtime with start time after end time test
-     * add showtime with time interval < movie duration test
-     * add showtime with time interval = movie duration test
-     * add showtime with wrong time format start time test
-     *
 
-     *
-     * update showtime with empty values test
-     * update showtime start time to be after end time test
-     * update showtime start time == end time test
-     * update showtime start time with wrong time format test
-     * update showtime price to be negative test
-     * update showtime theater to one with an overlapping time interval test
-     *
-     * delete showtime that has bookings test
-     */
 }
