@@ -23,13 +23,13 @@ The application supports:
 - Managing movies (CRUD)
 - Scheduling showtimes per movie
 - Booking seats per showtime
-- Validation, exception handling, and cascading deletions (movie ➝ showtimes ➝ bookings)
+- Validation, exception handling, and cascading deletions (deleting a movie deletes it's showtimes and the related bookings)
 
 ---
 
 ## Setup & Run Instructions
 
-### Build the Application (Locally)
+### Build the Application
 
 1. Clone the repo:
 ```bash
@@ -40,7 +40,7 @@ cd popcorn-palace
 ```bash
 docker compose up --build
 ```
-3. Access the application at `http://localhost:8080/movies/all` for example, or through postman.
+3. Access the application at `http://localhost:8080/movies/all` for example, via web browser or through postman.
 4. You can connect to PostgreSQL at `localhost:5432` with the credentials:
 ```bash
 Host:     localhost
