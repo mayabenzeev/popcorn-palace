@@ -39,7 +39,10 @@ public class GlobalExceptionHandler {
         return createResponseBody(errorMessage, HttpStatus.BAD_REQUEST);
     }
 
-    //TODO: add global handler for other exceptions
+    @ExceptionHandler(value = RuntimeException.class)
+    public ResponseEntity<?> handleRuntimeException(RuntimeException e) {
+        return createResponseBody(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
     /**
      * Creates a unified response format for all exceptions
